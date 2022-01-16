@@ -1,0 +1,16 @@
+.allCalendarsContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.fromCalendarContainer {
+  width: 50%;
+}
+
+.toCalendarContainer {
+  width: 50%;
+}
+
+.calendar {
+  margin: auto;
+}

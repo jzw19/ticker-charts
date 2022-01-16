@@ -1,32 +1,43 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../util/api';
+import mockApi from '../../util/mockApi';
 import PropTypes from 'prop-types';
 import Calendar from 'react-calendar';
 
-export const UserInput = ({ setTickerData }) => {
-  const [tickerSymbols, setTickerSymbols] = useState({});
+import 'react-calendar/dist/Calendar.css';
+import './UserInput.scss';
+
+export const UserInput = ({
+  tickerSymbols,
+  isTickerComparisonChartEnabled,
+  setTickerData,
+  setTickerSymbols,
+  setIsTickerComparisonChartEnabled,
+  setShouldRerender
+}) => {
   const [tickerSymbolOptions, setTickerSymbolOptions] = useState([]);
   const [selectedTickerSymbol, setSelectedTickerSymbol] = useState('');
   const [fromDate, setFromDate] = useState({ year: '2020', month: '01', day: '01' });
   const [toDate, setToDate] = useState({ year: '2020', month: '02', day: '01' });
 
   useEffect(async () => {
-    await api.getMockTickerList().then(
+    await mockApi.getTickerList().then(
       (response) => setTickerSymbolOptions(response),
       (err) => console.error(err)
     );
   }, []);
 
-  const displayTickerData = async () => {
+  const getTickerDataInRange = async () => {
     const formattedTickerSymbols = Object.keys(tickerSymbols).join(',');
     const formattedFromDate = `${fromDate.year}-${fromDate.month}-${fromDate.day}`;
     const formattedToDate = `${toDate.year}-${toDate.month}-${toDate.day}`;
+    setShouldRerender(true);
 
-    console.log(formattedTickerSymbols);
-    console.log(formattedFromDate);
-    console.log(formattedToDate);
-    await api.getMockTickerData(formattedTickerSymbols, formattedFromDate, formattedToDate).then(
-      (response) => setTickerData(response), 
+    await mockApi.getTickerData(formattedTickerSymbols, formattedFromDate, formattedToDate).then(
+      (response) => {
+        setTickerData(response);
+        setShouldRerender(false);
+      }, 
       (err) => console.error(err)
     );
   }
@@ -66,7 +77,7 @@ export const UserInput = ({ setTickerData }) => {
   const generateTickerOptions = () => {
     const options = [];
     for(const tickerSymbol of tickerSymbolOptions) {
-      options.push(<option value={tickerSymbol}>{tickerSymbol}</option>);
+      options.push(<option key={tickerSymbol} value={tickerSymbol}>{tickerSymbol}</option>);
     }
     if(tickerSymbolOptions.length && !selectedTickerSymbol.length) {
       setSelectedTickerSymbol(tickerSymbolOptions[0]);
@@ -76,6 +87,10 @@ export const UserInput = ({ setTickerData }) => {
         {options}
       </select>
     );
+  }
+
+  const toggleTickerComparisonChart = () => {
+    setIsTickerComparisonChartEnabled(!isTickerComparisonChartEnabled);
   }
 
   return(
@@ -88,18 +103,21 @@ export const UserInput = ({ setTickerData }) => {
         SYMBOLS ADDED: {Object.keys(tickerSymbols).join(',')}
       </div>
 
-      <div>
-        <div>
+      <div className='allCalendarsContainer'>
+        <div className='fromCalendarContainer'>
           <br/>FROM<br/>
           <Calendar className='calendar from' onChange={handleUpdateFrom}/>
         </div>
-        <div>
+        <div className='toCalendarContainer'>
           <br/>TO<br/>
           <Calendar className='calendar to' onChange={handleUpdateTo}/>
         </div>
       </div>
 
-      <br/><button onClick={displayTickerData}>GET</button>
+      <br/>
+      <input type='checkbox' onClick={toggleTickerComparisonChart} value={isTickerComparisonChartEnabled}/> Toggle ticker comparison chart
+      <br/>
+      <button onClick={getTickerDataInRange}>Generate Charts</button>
     </div>
   )
 }

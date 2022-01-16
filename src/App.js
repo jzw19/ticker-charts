@@ -1,6 +1,6 @@
 import Root from './components/Root/Root';
 
-import './App.css';
+import './App.scss';
 const App = () => {
   return (
     <div className="App">
