@@ -14,6 +14,8 @@ const getTickerData = (tickers, from, to) => {
   );
 }
 
+const getTickerList = () => axios.get('https://ce-test-api.fly.dev/api/historical/');
+
 const getMockTickerData = () => {
   return Promise.resolve({
     "2018-01-02": {
@@ -51,9 +53,18 @@ const getMockTickerData = () => {
   });
 }
 
+const getMockTickerList = () => Promise.resolve([
+  "WMT",
+  "TGT",
+  "AMZN",
+  "UPS"
+]);
+
 export const api = {
   getTickerData: (tickers, from, to) => getTickerData(tickers, from, to),
-  getMockTickerData: () => getMockTickerData()
+  getMockTickerData: () => getMockTickerData(),
+  getTickerList: () => getTickerList(),
+  getMockTickerList: () => getMockTickerList()
 };
 
 export default api;
