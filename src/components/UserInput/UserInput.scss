@@ -3,14 +3,54 @@
   flex-direction: row;
 }
 
-.fromCalendarContainer {
+.calendarContainer {
   width: 50%;
 }
 
-.toCalendarContainer {
-  width: 50%;
+.symbolsAddedLabel {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.symbolsAddedContent {
+  margin-block: 8px;
 }
 
 .calendar {
   margin: auto;
+  border-radius: 16px;
+  button {
+    border-radius: 16px;
+  }
+}
+
+.tickerSelect {
+  min-width: 100px;
+  font-size: .8em;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 4px;
+  margin: 1%;
+  padding: 4px 8px;
+  background-color: rgb(81, 205, 160);
+  border-color:rgb(60, 150, 120)
+}
+
+.interactiveButton {
+  min-width: 100px;
+  min-height: 32px;
+  font-size: .8em;
+  font-weight: bold;
+  color: rgb(245, 245, 245);
+  background-color: rgb(71, 71, 253);
+  border: 0;
+}
+
+.interactiveButton:hover {
+  background-color: blue;
+}
+
+.generateChartsButton {
+  margin-block: 8px;
+  padding: 8px;
 }
