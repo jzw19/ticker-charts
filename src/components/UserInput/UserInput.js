@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../util/api';
+// import api from '../../util/api';
 import mockApi from '../../util/mockApi';
 import PropTypes from 'prop-types';
 import Calendar from 'react-calendar';
@@ -12,8 +12,7 @@ export const UserInput = ({
   isTickerComparisonChartEnabled,
   setTickerData,
   setTickerSymbols,
-  setIsTickerComparisonChartEnabled,
-  setShouldRerender
+  setIsTickerComparisonChartEnabled
 }) => {
   const [tickerSymbolOptions, setTickerSymbolOptions] = useState([]);
   const [selectedTickerSymbol, setSelectedTickerSymbol] = useState('');
@@ -22,7 +21,9 @@ export const UserInput = ({
 
   useEffect(async () => {
     await mockApi.getTickerList().then(
-      (response) => setTickerSymbolOptions(response),
+      (response) => {
+        setTickerSymbolOptions(response.data)
+      },
       (err) => console.error(err)
     );
   }, []);
@@ -31,13 +32,9 @@ export const UserInput = ({
     const formattedTickerSymbols = Object.keys(tickerSymbols).join(',');
     const formattedFromDate = `${fromDate.year}-${fromDate.month}-${fromDate.day}`;
     const formattedToDate = `${toDate.year}-${toDate.month}-${toDate.day}`;
-    setShouldRerender(true);
 
     await mockApi.getTickerData(formattedTickerSymbols, formattedFromDate, formattedToDate).then(
-      (response) => {
-        setTickerData(response);
-        setShouldRerender(false);
-      }, 
+      (response) => setTickerData(response), 
       (err) => console.error(err)
     );
   }
@@ -83,7 +80,7 @@ export const UserInput = ({
       setSelectedTickerSymbol(tickerSymbolOptions[0]);
     }
     return(
-      <select value={selectedTickerSymbol} onChange={handleSelectTickerSymbol}>
+      <select className='tickerSelect' value={selectedTickerSymbol} onChange={handleSelectTickerSymbol}>
         {options}
       </select>
     );
@@ -97,33 +94,42 @@ export const UserInput = ({
     <div className='userInputContainer'>
       <span>Add ticker: </span>
       {generateTickerOptions()}
-      <button onClick={addTickerSymbol}>Add</button>
+      <button className='interactiveButton' onClick={addTickerSymbol}>Add</button>
       <br/>
-      <div>
-        SYMBOLS ADDED: {Object.keys(tickerSymbols).join(',')}
+      <div className='symbolsAddedContainer'>
+        <div className='symbolsAddedLabel'>
+          SYMBOLS ADDED
+        </div>
+        <div className='symbolsAddedContent'>
+          {Object.keys(tickerSymbols).length ? Object.keys(tickerSymbols).join(', ') : 'No symbols added yet'}
+        </div>
       </div>
 
       <div className='allCalendarsContainer'>
-        <div className='fromCalendarContainer'>
+        <div className='calendarContainer'>
           <br/>FROM<br/>
-          <Calendar className='calendar from' onChange={handleUpdateFrom}/>
+          <Calendar className='calendar from' calendarType='US' onChange={handleUpdateFrom}/>
         </div>
-        <div className='toCalendarContainer'>
+        <div className='calendarContainer'>
           <br/>TO<br/>
-          <Calendar className='calendar to' onChange={handleUpdateTo}/>
+          <Calendar className='calendar to' calendarType='US' onChange={handleUpdateTo}/>
         </div>
       </div>
 
       <br/>
       <input type='checkbox' onClick={toggleTickerComparisonChart} value={isTickerComparisonChartEnabled}/> Toggle ticker comparison chart
       <br/>
-      <button onClick={getTickerDataInRange}>Generate Charts</button>
+      <button className='interactiveButton generateChartsButton' onClick={getTickerDataInRange}>Generate Charts</button>
     </div>
   )
 }
 
 UserInput.propTypes = {
-  setTickerData: PropTypes.func
+  tickerSymbols: PropTypes.object,
+  isTickerComparisonChartEnabled: PropTypes.bool,
+  setTickerData: PropTypes.func,
+  setTickerSymbols: PropTypes.func,
+  setIsTickerComparisonChartEnabled: PropTypes.func
 }
 
 export default UserInput;
