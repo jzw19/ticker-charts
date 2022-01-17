@@ -21,7 +21,6 @@ export const UserInput = ({
   const [shouldShowErrorMessageForTickers, setShouldShowErrorMessageForTickers] = useState(false);
   const [shouldShowErrorMessageForData, setShouldShowErrorMessageForData] = useState(true);
   const apiInUse = process.env.REACT_APP_API === 'mock' ? mockApi : api;
-  console.log(process.env.REACT_APP_API);
 
   useEffect(async () => {
     await apiInUse.getTickerList().then(
