@@ -18,24 +18,42 @@ export const UserInput = ({
   const [selectedTickerSymbol, setSelectedTickerSymbol] = useState('');
   const [fromDate, setFromDate] = useState({ year: '2020', month: '01', day: '01' });
   const [toDate, setToDate] = useState({ year: '2020', month: '02', day: '01' });
+  const [shouldShowErrorMessageForTickers, setShouldShowErrorMessageForTickers] = useState(false);
+  const [shouldShowErrorMessageForData, setShouldShowErrorMessageForData] = useState(true);
+  const apiInUse = process.env.REACT_APP_API === 'mock' ? mockApi : api;
+  console.log(process.env.REACT_APP_API);
 
   useEffect(async () => {
-    await mockApi.getTickerList().then(
+    await apiInUse.getTickerList().then(
       (response) => {
-        setTickerSymbolOptions(response.data)
+        response.data.length ? setShouldShowErrorMessageForTickers(false) : setShouldShowErrorMessageForTickers(true);
+        setTickerSymbolOptions(response.data);
       },
-      (err) => console.error(err)
+      (err) => {
+        setShouldShowErrorMessageForTickers(true);
+        console.error(err);
+      }
     );
   }, []);
 
   const getTickerDataInRange = async () => {
+    if(!Object.keys(tickerSymbols).length) {
+      setShouldShowErrorMessageForData(true);
+      return;
+    }
     const formattedTickerSymbols = Object.keys(tickerSymbols).join(',');
     const formattedFromDate = `${fromDate.year}-${fromDate.month}-${fromDate.day}`;
     const formattedToDate = `${toDate.year}-${toDate.month}-${toDate.day}`;
 
-    await mockApi.getTickerData(formattedTickerSymbols, formattedFromDate, formattedToDate).then(
-      (response) => setTickerData(response), 
-      (err) => console.error(err)
+    await apiInUse.getTickerData(formattedTickerSymbols, formattedFromDate, formattedToDate).then(
+      (response) => {
+        setShouldShowErrorMessageForData(false);
+        setTickerData(response.data)
+      }, 
+      (err) => {
+        setShouldShowErrorMessageForData(true);
+        console.error(err)
+      }
     );
   }
 
@@ -90,11 +108,37 @@ export const UserInput = ({
     setIsTickerComparisonChartEnabled(!isTickerComparisonChartEnabled);
   }
 
+  const renderTickersErrorMessage = () => {
+    const errorMessage = 'Oops! Looks like there was a problem getting the ticker symbols.\nPlease refresh the page or opt to use the mock data.';
+    return shouldShowErrorMessageForTickers ?
+      <div className='errorMessage'>
+        <span>{errorMessage}</span><br/>
+      </div>
+      : null;
+  }
+
+  const renderDataErrorMessage = () => {
+    const errorMessage = 'There was a problem with fetching the data. Please make sure you have selected at least one ticker symbol and a valid date range.';
+    const tickerSymbolsSelected = Object.keys(tickerSymbols).length ? Object.keys(tickerSymbols) : 'None';
+    const formattedFromDate = `${fromDate.month}-${fromDate.day}-${fromDate.year}`;
+    const formattedToDate = `${toDate.month}-${toDate.day}-${toDate.year}`;
+    return shouldShowErrorMessageForData ?
+      <div className='errorMessage'>
+        <span>{errorMessage}</span><br/><br/>
+        <span>Ticker symbols selected: {tickerSymbolsSelected}</span><br/>
+        <span>From date (mm-dd-yyyy): {formattedFromDate}</span><br/>
+        <span>To date (mm-dd-yyyy): {formattedToDate}</span><br/>
+      </div>
+      : null;
+  }
+
   return(
     <div className='userInputContainer'>
       <span>Add ticker: </span>
       {generateTickerOptions()}
       <button className='interactiveButton' onClick={addTickerSymbol}>Add</button>
+      <br/>
+      {renderTickersErrorMessage()}
       <br/>
       <div className='symbolsAddedContainer'>
         <div className='symbolsAddedLabel'>
@@ -120,6 +164,8 @@ export const UserInput = ({
       <input type='checkbox' onClick={toggleTickerComparisonChart} value={isTickerComparisonChartEnabled}/> Toggle ticker comparison chart
       <br/>
       <button className='interactiveButton generateChartsButton' onClick={getTickerDataInRange}>Generate Charts</button>
+      <br/>
+      {renderDataErrorMessage()}
     </div>
   )
 }
