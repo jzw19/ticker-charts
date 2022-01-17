@@ -5,7 +5,7 @@ import Charts from '../Charts/Charts';
 import './Root.scss';
 export const Root = () => {
   const [tickerData, setTickerData] = useState({});
-  const [tickerSymbols, setTickerSymbols] = useState([]);
+  const [tickerSymbols, setTickerSymbols] = useState({});
   const [isTickerComparisonChartEnabled, setIsTickerComparisonChartEnabled] = useState(false);
 
   return (
