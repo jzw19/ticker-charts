@@ -9,7 +9,7 @@ const authorizedAxios = axios.create({
 
 const getTickerData = (tickers, from, to) => {
   const endpoint = '/historical';
-  const queryParams = `?ticker=${tickers}&from=${from}&to=${to}`;
+  const queryParams = `/?ticker=${tickers}&from=${from}&to=${to}`;
   return authorizedAxios.get(
     `${endpoint}${queryParams}`
   );
