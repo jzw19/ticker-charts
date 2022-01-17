@@ -1,27 +1,20 @@
 import React, {useEffect, useState} from 'react';
 import { CanvasJSChart } from 'canvasjs-react-charts';
+import PropTypes from 'prop-types';
 
 import './Charts.scss';
 export const Charts = ({
   tickerData,
   tickerSymbols,
-  isTickerComparisonChartEnabled,
-  shouldRerender,
-  prevShouldRerender,
-  setShouldRerender
+  isTickerComparisonChartEnabled
 }) => {
   const [chartData, setChartData] = useState({});
 
   useEffect(() => formatDataByTicker(), [tickerData]);
-  useEffect(() => {
-    if(prevShouldRerender && !shouldRerender) {
-      generateCharts();
-    }
-  }, [prevShouldRerender, shouldRerender])
 
   const formatDataByTicker = () => {
     let formattedData = {};
-    for(const ticker of tickerSymbols) {
+    for(const ticker of Object.keys(tickerSymbols)) {
       formattedData[ticker] = {};
     }
     for(const dateKey of Object.keys(tickerData)) {
@@ -60,7 +53,8 @@ export const Charts = ({
         },
         axisY: {
           prefix: '$',
-          title: 'Price'
+          title: 'Price',
+          includeZero: false
         },
         data: [{
           type: 'spline',
@@ -69,8 +63,6 @@ export const Charts = ({
           dataPoints
         }]
       };
-      console.log(tickerSymbol);
-      console.log(dataPoints);
       stockCharts.push(
         <div key={tickerSymbol} className='stockChart'>
           <CanvasJSChart options={options} />
@@ -103,7 +95,8 @@ export const Charts = ({
         },
         axisY: {
           prefix: '$',
-          title: 'Price'
+          title: 'Price',
+          includeZero: false
         },
         data: consolidatedOptionsData
       }
@@ -114,8 +107,6 @@ export const Charts = ({
       );
     }
 
-    setShouldRerender(false);
-
     return(
       <div className='stockChartsContainer'>
         {stockCharts}
@@ -125,11 +116,17 @@ export const Charts = ({
   
   return(
     <div>
-      {Object.keys(tickerData).length ? null : 'No data available. Please click the "GET" button to fetch data first.'}
+      {Object.keys(tickerData).length ? null : 'No data available yet. Please click the "Generate Charts" button to fetch data.'}
       <br/>
       {generateCharts()}
     </div>
   );
+}
+
+Charts.propTypes = {
+  tickerData: PropTypes.object,
+  tickerSymbols: PropTypes.object,
+  isTickerComparisonChartEnabled: PropTypes.bool
 }
 
 export default Charts;

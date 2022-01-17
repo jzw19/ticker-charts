@@ -339,12 +339,14 @@ const getTickerData = () => {
   });
 }
 
-const getTickerList = () => Promise.resolve([
-  "WMT",
-  "TGT",
-  "AMZN",
-  "UPS"
-]);
+const getTickerList = () => Promise.resolve({
+    data: [
+        "WMT",
+        "TGT",
+        "AMZN",
+        "UPS"
+    ]
+});
 
 export const mockApi = {
   getTickerData: (tickers, from, to) => getTickerData(tickers, from, to),
