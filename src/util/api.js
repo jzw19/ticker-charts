@@ -4,7 +4,8 @@ const authorizedAxios = axios.create({
   baseURL: 'https://ce-test-api.fly.dev/api',
   headers: {
     'api-token': '1337-time'
-  }
+  },
+  timeout: 5000
 });
 
 const getTickerData = (tickers, from, to) => {
@@ -15,7 +16,7 @@ const getTickerData = (tickers, from, to) => {
   );
 }
 
-const getTickerList = () => authorizedAxios.get('/tickers');
+const getTickerList = () => authorizedAxios.get('/tickers/');
 
 export const api = {
   getTickerData: (tickers, from, to) => getTickerData(tickers, from, to),

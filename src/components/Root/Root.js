@@ -20,9 +20,6 @@ export const Root = () => {
           selected. This will display data for each individual ticker. After individual charts have been
           generated, you may then toggle showing the ticker comparison chart, which displays the data
           for each ticker on a single chart.
-          <br/><br/>
-          <strong>IMPORTANT:</strong> this application is currently using mock data because the response from hitting the actual
-          API is returning an empty array for the data.
         </div>
       </div>
       <UserInput
