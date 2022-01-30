@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { CanvasJSChart } from 'canvasjs-react-charts';
+import { jsPDF } from 'jspdf';
 import PropTypes from 'prop-types';
 
 import './Charts.scss';
@@ -56,6 +57,9 @@ export const Charts = ({
           title: 'Price',
           includeZero: false
         },
+        axisX: {
+          title: 'Date'
+        },
         data: [{
           type: 'spline',
           xValueFormatString: 'DD MMM YYYY',
@@ -98,6 +102,9 @@ export const Charts = ({
           title: 'Price',
           includeZero: false
         },
+        axisX: {
+          title: 'Date'
+        },
         data: consolidatedOptionsData
       }
       stockCharts.push(
@@ -107,18 +114,41 @@ export const Charts = ({
       );
     }
 
-    return(
-      <div className='stockChartsContainer'>
-        {stockCharts}
-      </div>
-    )
+    return stockCharts;
+  }
+
+  const exportCharts = () => {
+    const pdf = new jsPDF();
+    const title = 'Stock Charts';
+    const canvasHalfWidth = pdf.internal.pageSize.width / 2;
+    const spaceBetweenCanvases = 20;
+    const xOffsetForImage = (pdf.internal.pageSize.width - canvasHalfWidth) / 2;
+    const allStockCharts = Array.from(document.getElementsByClassName('canvasjs-chart-canvas'));
+
+    let yOffset = 10;
+    pdf.text(title, canvasHalfWidth, yOffset, 'center');
+    yOffset += spaceBetweenCanvases;
+    // CanvasJS adds 2 <canvas> elements with the same className to the DOM per chart. The one that display the data is always the first.    
+    for(let i = 0; i < allStockCharts.length; i+=2) {
+      pdf.addImage(allStockCharts[i].toDataURL(), 'JPEG', xOffsetForImage, yOffset, canvasHalfWidth, canvasHalfWidth);
+      yOffset += canvasHalfWidth + spaceBetweenCanvases;
+      // pdf.text('table goes here', canvasHalfWidth, yOffset, 'center');
+      // yOffset += canvasHalfWidth + (spaceBetweenCanvases * 2); // this needs to be calculated to be the height of the table + space between
+      if(yOffset > pdf.internal.pageSize.height - 130) {
+        pdf.addPage();
+        yOffset = 20;
+      }
+    }
+    pdf.save('stock-charts.pdf');
   }
   
   return(
-    <div>
+    <div className='stockChartsContainer'>
       {Object.keys(tickerData).length ? null : 'No data available yet. Please click the "Generate Charts" button to fetch data.'}
       <br/>
       {generateCharts()}
+      <br/>
+      <button className='exportChartsButton' onClick={exportCharts} /*disabled={Object.keys(tickerData).length === 0}*/>Export as PDF</button>
     </div>
   );
 }

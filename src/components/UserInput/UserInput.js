@@ -19,7 +19,7 @@ export const UserInput = ({
   const [fromDate, setFromDate] = useState({ year: '2020', month: '01', day: '01' });
   const [toDate, setToDate] = useState({ year: '2020', month: '02', day: '01' });
   const [shouldShowErrorMessageForTickers, setShouldShowErrorMessageForTickers] = useState(false);
-  const [shouldShowErrorMessageForData, setShouldShowErrorMessageForData] = useState(true);
+  const [shouldShowErrorMessageForData, setShouldShowErrorMessageForData] = useState(false);
   const apiInUse = process.env.REACT_APP_API === 'mock' ? mockApi : api;
 
   useEffect(async () => {
