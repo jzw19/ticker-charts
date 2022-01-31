@@ -137,7 +137,7 @@ export const Charts = ({
 
     let yOffset = 10;
     pdf.text(title, canvasHalfWidth, yOffset, 'center');
-    // CanvasJS adds 2 <canvas> elements with the same className to the DOM per chart. The one that display the data is always the first. 
+    // CanvasJS adds 2 <canvas> elements with the same className to the DOM per chart. The one that displays the data is always the first. 
     for(let i = 0; i < allStockCharts.length && i/2 <= Object.keys(tickerSymbols).length; i+=2) {
       yOffset = 30;
       pdf.addImage(allStockCharts[i].toDataURL(), 'JPEG', xOffsetForImage, yOffset, canvasHalfWidth, canvasHalfWidth);
