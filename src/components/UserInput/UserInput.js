@@ -62,6 +62,12 @@ export const UserInput = ({
     setTickerSymbols(nextTickerSymbols);
   }
 
+  const removeTickerSymbol = () => {
+    const nextTickerSymbols = {...tickerSymbols};
+    delete nextTickerSymbols[selectedTickerSymbol];
+    setTickerSymbols(nextTickerSymbols);
+  }
+
   const handleUpdateFrom = (value) => {
     const year = `${value.getFullYear()}`;
     const month = value.getMonth() + 1 < 10 ? `0${value.getMonth() + 1}` : `${value.getMonth() + 1}`;
@@ -133,9 +139,10 @@ export const UserInput = ({
 
   return(
     <div className='userInputContainer'>
-      <span>Add ticker: </span>
+      <span>Choose ticker: </span>
       {generateTickerOptions()}
       <button className='interactiveButton' onClick={addTickerSymbol}>Add</button>
+      <button className='interactiveButton' onClick={removeTickerSymbol}>Remove</button>
       <br/>
       {renderTickersErrorMessage()}
       <br/>

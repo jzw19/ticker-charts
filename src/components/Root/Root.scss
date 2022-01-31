@@ -5,6 +5,26 @@
 
 .instructionsContent {
   width: 60%;
-  margin: 8px auto;
+  margin: 2% auto;
   text-align: left;
+}
+
+.interactiveButton {
+  margin: 0 1%;
+  padding: 0 1%;
+  min-width: 100px;
+  min-height: 32px;
+  font-size: .8em;
+  font-weight: bold;
+  color: rgb(245, 245, 245);
+  background-color: rgb(71, 71, 253);
+  border: 1px solid rgb(32, 32, 32);
+}
+
+.interactiveButton:hover {
+  background-color: blue;
+}
+
+.interactiveButton:disabled {
+  background-color: gray;
 }
