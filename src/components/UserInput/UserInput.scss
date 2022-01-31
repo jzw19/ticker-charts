@@ -36,20 +36,6 @@
   border-color:rgb(60, 150, 120)
 }
 
-.interactiveButton {
-  min-width: 100px;
-  min-height: 32px;
-  font-size: .8em;
-  font-weight: bold;
-  color: rgb(245, 245, 245);
-  background-color: rgb(71, 71, 253);
-  border: 0;
-}
-
-.interactiveButton:hover {
-  background-color: blue;
-}
-
 .generateChartsButton {
   margin-block: 8px;
   padding: 8px;
