@@ -19,7 +19,7 @@ export const UserInput = ({
   const [fromDate, setFromDate] = useState({ year: '2020', month: '01', day: '01' });
   const [toDate, setToDate] = useState({ year: '2020', month: '02', day: '01' });
   const [shouldShowErrorMessageForTickers, setShouldShowErrorMessageForTickers] = useState(false);
-  const [shouldShowErrorMessageForData, setShouldShowErrorMessageForData] = useState(true);
+  const [shouldShowErrorMessageForData, setShouldShowErrorMessageForData] = useState(false);
   const apiInUse = process.env.REACT_APP_API === 'mock' ? mockApi : api;
 
   useEffect(async () => {
@@ -59,6 +59,12 @@ export const UserInput = ({
   const addTickerSymbol = () => {
     const nextTickerSymbols = {...tickerSymbols};
     nextTickerSymbols[selectedTickerSymbol] = true;
+    setTickerSymbols(nextTickerSymbols);
+  }
+
+  const removeTickerSymbol = () => {
+    const nextTickerSymbols = {...tickerSymbols};
+    delete nextTickerSymbols[selectedTickerSymbol];
     setTickerSymbols(nextTickerSymbols);
   }
 
@@ -133,9 +139,10 @@ export const UserInput = ({
 
   return(
     <div className='userInputContainer'>
-      <span>Add ticker: </span>
+      <span>Choose ticker: </span>
       {generateTickerOptions()}
       <button className='interactiveButton' onClick={addTickerSymbol}>Add</button>
+      <button className='interactiveButton' onClick={removeTickerSymbol}>Remove</button>
       <br/>
       {renderTickersErrorMessage()}
       <br/>
