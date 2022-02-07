@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
-import App from './App';
+import Root from './Root';
 
-describe('App', () => {
+describe('Root', () => {
   it('renders', () => {
-    render(<App />);
-
+    render(<Root />);
+    
     expect(screen.queryByText('INSTRUCTIONS')).not.toBeNull();
     expect(screen.queryByText('Add')).not.toBeNull();
     expect(screen.queryByText('Remove')).not.toBeNull();

@@ -167,7 +167,7 @@ export const UserInput = ({
       </div>
 
       <br/>
-      <input type='checkbox' onClick={toggleTickerComparisonChart} value={isTickerComparisonChartEnabled}/> Toggle ticker comparison chart
+      <input type='checkbox' onClick={toggleTickerComparisonChart} value={isTickerComparisonChartEnabled} data-testid='comparisonChartToggleButton' /> Toggle ticker comparison chart
       <br/>
       <button className='interactiveButton generateChartsButton' onClick={getTickerDataInRange}>Generate Charts</button>
       <br/>
