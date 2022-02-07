@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { CanvasJSChart } from 'canvasjs-react-charts';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
@@ -50,6 +50,7 @@ export const Charts = ({
           y: Number.parseFloat(chartData[tickerSymbol][dateKey].close)
         });
       }
+      console.log(tickerSymbol)
       const options = {
         theme: 'light2',
         title: {
