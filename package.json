@@ -9,7 +9,6 @@
     "@testing-library/user-event": "^13.5.0",
     "axios": "^0.24.0",
     "canvasjs-react-charts": "^1.0.5",
-    "cross-env": "^7.0.3",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.5.23",
     "react": "^17.0.2",
@@ -23,6 +22,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "test:coverage": "react-scripts test --coverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -30,6 +30,11 @@
       "react-app",
       "react-app/jest"
     ]
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "canvasjs-react-charts": "<rootDir>/__mocks__/canvasjs-react-charts.js"
+    }
   },
   "browserslist": {
     "production": [
